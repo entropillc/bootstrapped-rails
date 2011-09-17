@@ -10,7 +10,7 @@ In addition, it as generators based off of Ryan Bates nifty-generators https://g
 
 Add the gem to your Gemfile.
 
-  gem "bootstrap-rails"
+  gem "bootstrapped-rails"
 
 Add the following to the application.css in the Rails 3.1 pipeline pipeline
 
@@ -20,7 +20,7 @@ Add the following to the application.css in the Rails 3.1 pipeline pipeline
 Add the following to the application.js in the Rails 3.1 asset pipeline
 
   //= require jquery.bootstrap
-  //= require.tablesorter
+  //= require jquery.tablesorter
 	
 The Table Sorter JQuery plugin is only required if you want tables that allow you to order on the column headings.
 
