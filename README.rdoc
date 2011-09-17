@@ -14,13 +14,13 @@ Add the gem to your Gemfile.
 
 Add the following to the application.css in the Rails 3.1 pipeline pipeline
 
-	//= require bootstrap
-	//= require jquery.bootstrap
+  //= require bootstrap
+  //= require jquery.bootstrap
 	
 Add the following to the application.js in the Rails 3.1 asset pipeline
 
-	//= require jquery.bootstrap
-	//= require.tablesorter
+  //= require jquery.bootstrap
+  //= require.tablesorter
 	
 The Table Sorter JQuery plugin is only required if you want tables that allow you to order on the column headings.
 
