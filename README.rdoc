@@ -1,4 +1,4 @@
-= Bootstrap Rails
+= Bootstrapped Rails
 
 A gem containing Twitter's Bootstrap CSS Project, a JQuery Plugin to simply user interface interactivity, and generators to make scaffolds sexy.
 
@@ -26,24 +26,24 @@ The Table Sorter JQuery plugin is only required if you want tables that allow yo
 
 Then you can run any of the included generators.
 
-  rails g bootstrap:scaffold Recipe name:string index new
+  rails g bootstrapped:scaffold Recipe name:string index new
 
 == Included Generators
 
-* bootstrap:layout: generates generic layout, stylesheet, and helper files.
-* bootstrap:scaffold: generates a controller and optional model/migration.
+* bootstrapped:layout: generates generic layout, stylesheet, and helper files.
+* bootstrapped:scaffold: generates a controller and optional model/migration.
 
 To view the README for each generator, run it with the +help+ option.
 
-  rails g bootstrap:layout --help
+  rails g bootstrapped:layout --help
 
 == Troubleshooting and FAQs
 
-<b>What is the difference between bootstrap:scaffold and built-in scaffold?</b>
+<b>What is the difference between bootstrapped:scaffold and built-in scaffold?</b>
 
-One of the primary differences is that bootstrap:scaffold allows you to choose which controller actions to generate.
+One of the primary differences is that bootstrapped:scaffold allows you to choose which controller actions to generate.
 
-  rails g bootstrap:scaffold post name:string index new edit
+  rails g bootstrapped:scaffold post name:string index new edit
 
 There are a few changes to the generated code as well, such as no XML format by default.
 
@@ -52,7 +52,7 @@ It also offers support for Shoulda, and RSpec.
 
 <b>I get "undefined method 'title'" error.</b>
 
-Try running bootstrap:layout, that will generate this helper method. Or you can just change the templates to whatever approach you prefer for setting the title.
+Try running bootstrapped:layout, that will generate this helper method. Or you can just change the templates to whatever approach you prefer for setting the title.
 
 
 <b>I can't set new attributes in my model.</b>
@@ -91,6 +91,6 @@ Make sure you have mocha installed and require it in your spec/test helper.
 
 == Found a bug?
 
-If you are having a problem with Bootstrap Rails, first look at the FAQs above. If you still cannot resolve it, please submit an issue here.
+If you are having a problem with Bootstrapped Rails, first look at the FAQs above. If you still cannot resolve it, please submit an issue here.
 
-http://github.com/entropillc/bootstrap-rails/issues
+http://github.com/entropillc/bootstrapped-rails/issues
