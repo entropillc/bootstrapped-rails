@@ -2,6 +2,15 @@ body {
   padding-top: 40px;
 }
 
+.btn {
+  white-space: nowrap;
+}
+
+.btn.mini {
+  padding: 4px 6px;
+  font-size: 11px;
+}
+
 .divider {
   height: 1px;
   overflow: hidden;
@@ -37,16 +46,46 @@ div.well div.clearfix:last-child {
   margin-bottom: 0px;
 }
 
+div.well hr {
+  border-color: #ddd;
+  margin: 0px;
+}
+
 div.content h1 {
   margin: 10px;
 }
 
 div.modal {
-  top: 480px;
+  top: 360px;
+  margin-left: -280px;
 }
 
 div.modal form {
   margin-bottom: 0px;
+}
+
+div.spinner {
+  background: #333;
+  margin: -150px 0px 0px -100px;
+  width: 200px;
+  height: 200px;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  opacity: 0.9;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 10px;
+}
+
+div.spinner > p {
+  color: #d0d0d0;
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  position: absolute;
+  bottom: 24px;
+  width: 100%;
 }
 
 form div.actions {
@@ -75,6 +114,10 @@ select.multiple {
 
 textarea.xxlarge {
   overflow-y: auto;
+}
+
+th .btn {
+  font-weight: normal;
 }
 
 div.modal-backdrop, div.modal {

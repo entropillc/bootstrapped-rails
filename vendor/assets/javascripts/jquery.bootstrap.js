@@ -1,32 +1,113 @@
 $(function() {
   
+  // Local jQuery objects.
   var $window = $(window);
   
-  var alertMessages = $('div.alert-message');
-  var alertMessagesTimeout = setTimeout(function() {
-    alertMessages.slideUp(600);
-  }, 5000);
+  // Local variables.
+  var hash = window.location.hash;
   
-  alertMessages.find('a.close').bind('click', function(evt) {
-    clearTimeout(alertMessagesTimeout);
-    alertMessages.slideUp(600);
+  // Local functions.
+  var closeActiveModal = function(newLocationHash) {
+    var modal = $('div.modal.active');
+    var modalBackdrop = modal.parent('div.modal-backdrop');
+    
+    newLocationHash = newLocationHash || '#';
+    
+    window.location.hash = (newLocationHash.charAt(0) !== '#') ? '#' : newLocationHash;
+    
+    modal.removeClass('active');
+    modalBackdrop.removeClass('active');
+  };
+  
+  var startAlertMessageTimeout = function() {
+    var alertMessages = $('div.alert-message');
+    var alertMessagesTimeout = setTimeout(function() {
+      alertMessages.slideUp(600);
+    }, 5000);
+  
+    alertMessages.find('a.close').bind('click', function(evt) {
+      clearTimeout(alertMessagesTimeout);
+      alertMessages.slideUp(600);
+    });
+  };
+  
+  // Setup alert messages.
+  startAlertMessageTimeout();
+  
+  // Setup AJAX forms.
+  var ajaxForms = $('form.ajax');
+  
+  ajaxForms.live('submit', function(evt) {
+    var ajaxForm = $(this);
+    var modalBackdrop = $('<div class="modal-backdrop"/>');
+    var spinnerContainer = $('<div class="spinner"/>');
+    var spinnerLabel = $('<p>Loading</p>');
+    var spinner = new Spinner({
+      lines: 12,      // The number of lines to draw
+      length: 7,      // The length of each line
+      width: 4,       // The line thickness
+      radius: 10,     // The radius of the inner circle
+      color: '#d0d0d0',  // #rgb or #rrggbb
+      speed: 1,       // Rounds per second
+      trail: 60,      // Afterglow percentage
+      shadow: false   // Whether to render a shadow
+    });
+    
+    ajaxForm.append(modalBackdrop);
+    modalBackdrop.append(spinnerContainer);
+    spinnerContainer.append(spinnerLabel);
+    
+    spinner.spin(spinnerContainer.get(0));
+    
+    modalBackdrop.addClass('active');
+    
+    var ajaxURL = ajaxForm.attr('action');
+    var ajaxMethod = ajaxForm.attr('method');
+    var ajaxHandler = ajaxForm.attr('data-ajax-handler');
+    
+    $.ajax(ajaxURL, {
+      type: ajaxMethod,
+      data: ajaxForm.serialize(),
+      success: function(data, textStatus, jqXHR) {
+        if (ajaxHandler && typeof ajaxHandler === 'string' && typeof window[ajaxHandler] === 'function') {
+          window[ajaxHandler](data);
+        }
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        var errorAlertHTML = '<div class="alert-message error">' +
+          '<a class="close" href="#">×</a>' +
+          '<p>An error occurred submitting the form</p>' +
+        '</div>';
+        
+        $(document.body).append(errorAlertHTML);
+        
+        startAlertMessageTimeout();
+      },
+      complete: function(jqXHR, textStatus) {
+        modalBackdrop.removeClass('active');
+        closeActiveModal();
+      }
+    });
+    
+    evt.preventDefault();
   });
   
+  // Setup modal links.
   var modalLinks = $('a.modal-target');
   
   modalLinks.live('click', function(evt) {
     var modalLink = $(this);
-    var modalId = modalLink.attr('href');
+    var modalID = modalLink.attr('href');
     
-    if (!modalId) return;
+    if (!modalID) return;
 
-    var isAjax = (modalId.charAt(0) !== '#');
+    var isAjax = (modalID.charAt(0) !== '#');
     
-    modalId = (isAjax) ? modalId : modalId.substr(1);
+    modalID = (isAjax) ? modalID : modalID.substr(1);
     
-    if (!modalId) return;
+    if (!modalID) return;
 
-    var modal = $('#' + modalId);
+    var modal = $('#' + modalID);
     
     if (modal.size() === 0) return;
     
@@ -37,20 +118,17 @@ $(function() {
     modalBackdrop.addClass('active');
     modal.addClass('active');
     
-    modal.find('input[autofocus]').focus();
+    modal.find('input[autofocus]:first').focus();
     
     modal.find('a.close').bind('click', function(evt) {
       var closeLink = $(this);
-      var closeLinkHref = closeLink.attr('href') || '#';
-      var modal = closeLink.closest('div.modal.active');
-      var modalBackdrop = modal.parent('div.modal-backdrop');
+      var newLocationHash = (closeLink.hasClass('modal-target')) ? closeLink.attr('href') || '#' : '#';
       
-      window.location.hash = (closeLinkHref.charAt(0) !== '#') ? '#' : closeLinkHref;
-      
-      modal.removeClass('active');
-      modalBackdrop.removeClass('active');
+      closeActiveModal(newLocationHash);
       
       closeLink.unbind();
+      
+      $('input[autofocus]:first').focus();
       
       evt.preventDefault();
     });
@@ -60,12 +138,7 @@ $(function() {
     }
   });
   
-  $window.bind('keyup', function(evt) {
-    if (evt.keyCode === 27) {
-      $('div.modal.active a.close:first').trigger('click');
-    }
-  });
-  
+  // Setup sortable tables.
   var tables = $('table');
   
   if ($.tablesorter) {
@@ -76,7 +149,7 @@ $(function() {
       var headers = {};
     
       for (var i = 0; i < $thead.size(); i++) {
-        if ($thead.eq(i).is(':empty')) {
+        if ($thead.eq(i).is(':empty') || $thead.eq(i).hasClass('no-sort')) {
           headers[i] = { sorter: false };
         }
       }
@@ -85,6 +158,7 @@ $(function() {
     });
   }
   
+  // Setup tabs and pills.
   var tabsets = $('ul.tabs, ul.pills');
   
   tabsets.each(function(index, element) {
@@ -115,16 +189,16 @@ $(function() {
       views.removeClass('active');
       
       var activeTabButton = activeTab.children('a');
-      var activeViewId = activeTabButton.attr('href');
+      var activeViewID = activeTabButton.attr('href');
 
-      if (!activeViewId) activeViewId = viewstack.eq(tabs.index('.active')).attr('id');
-      if (!activeViewId) return;
+      if (!activeViewID) activeViewID = viewstack.eq(tabs.index('.active')).attr('id');
+      if (!activeViewID) return;
 
-      activeViewId = (activeViewId.charAt(0) === '#') ? activeViewId.substr(1) : activeViewId;
+      activeViewID = (activeViewID.charAt(0) === '#') ? activeViewID.substr(1) : activeViewID;
 
-      if (!activeViewId) return;
+      if (!activeViewID) return;
 
-      var activeView = $('#' + activeViewId);
+      var activeView = $('#' + activeViewID);
 
       if (activeView.size() === 0) return;
 
@@ -139,5 +213,17 @@ $(function() {
     
     activeTab.removeClass('active').children('a').trigger('click');
   });
+  
+  // Global keyboard event handler.
+  $window.bind('keyup', function(evt) {
+    if (evt.keyCode === 27) {
+      $('div.modal.active a.close:first').trigger('click');
+    }
+  });
+  
+  // Restore the state of the location hash.
+  if (hash && hash.length > 0) {
+    $('a[href="' + hash + '"]').trigger('click');
+  }
   
 });
