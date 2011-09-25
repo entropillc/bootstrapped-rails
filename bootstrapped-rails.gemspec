@@ -12,13 +12,13 @@ Gem::Specification.new do |s|
 
   s.rubyforge_project = "bootstrapped-rails"
 
-  s.files         = `git ls-files`.split("\n")
-  s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
-  s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
+  s.files        = `git ls-files`.split("\n")
+  s.executables  = `git ls-files`.split("\n").select{|f| f =~ /^bin/}
+  s.require_path = 'lib'
   
   s.require_paths = Dir["{lib,features}/**/*", "[A-Z]*"]
 
-  s.add_dependency "railties", "~> 3.1.0"
+  s.add_dependency "rails", "~> 3.1.0"
   s.add_dependency "jquery-rails", "~> 1.0.14"
   s.add_dependency "bootstrapped", '0.0.3'
   s.add_development_dependency 'rspec-rails', '~> 2.6.1'

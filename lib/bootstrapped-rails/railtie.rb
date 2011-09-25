@@ -1,6 +1,6 @@
 module Bootstrapped
   module Rails
-    class Engine < ::Rails::Engine
+    class Railtie < ::Rails::Railtie; 
     end
   end
 end
