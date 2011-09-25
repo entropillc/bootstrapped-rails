@@ -16,10 +16,11 @@ Gem::Specification.new do |s|
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   
-  s.require_paths = Dir["{lib,features,vendor}/**/*", "[A-Z]*"]
+  s.require_paths = Dir["{lib,features}/**/*", "[A-Z]*"]
 
   s.add_dependency "railties", "~> 3.1.0"
   s.add_dependency "jquery-rails", "~> 1.0.14"
+  s.add_dependency "bootstrapped", '0.0.3'
   s.add_development_dependency 'rspec-rails', '~> 2.6.1'
   s.add_development_dependency 'cucumber', '~> 1.0.6'
   s.add_development_dependency 'rails', '~> 3.1.0'
